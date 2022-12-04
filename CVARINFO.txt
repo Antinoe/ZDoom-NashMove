@@ -1,0 +1,5 @@
+
+user int nm_enabled = 1;
+user float nm_viewbob = 1.0;
+user float nm_decel = 0.8;
+user float nm_speed = 2.0;

@@ -1,0 +1,2 @@
+
+Alias nm_reset "ResetCvar nm_decel; ResetCvar nm_speed; ResetCvar nm_viewbob"

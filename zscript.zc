@@ -32,7 +32,7 @@ class Z_NashMove : CustomInventory
 
 	// How much to reduce the slippery movement.
 	// Lower number = less slippery.
-	const DECEL_MULT = 0.8;
+	//const DECEL_MULT = 0.75;
 
 	//===========================================================================
 	//
@@ -68,24 +68,29 @@ class Z_NashMove : CustomInventory
 
 	override void Tick(void)
 	{
-		if (Owner && Owner is "PlayerPawn")
+		if (Owner && Owner is "PlayerPawn" && Owner.GetCVAR("nm_enabled") == 1)
 		{
 			if (bIsOnFloor())
 			{
+				float configDecel = Owner.GetCVAR("nm_decel");
+				float configSpeed = Owner.GetCVAR("nm_speed");
+				float configViewBob = Owner.GetCVAR("nm_viewbob");
 				// bump up the player's speed to compensate for the deceleration
 				// TO DO: math here is shit and wrong, please fix
-				double s = 1.0 + (1.0 - DECEL_MULT);
-				Owner.A_SetSpeed(s * 2);
+				double speed = 1.0 + (1.0 - configDecel);
+				// I don't see what's wrong with it, Nash.
+				// Maybe I'm not thinking it through, but it seems fine to me.
+				Owner.A_SetSpeed(speed * configSpeed);
 
 				// decelerate the player, if not in pain
 				if (!bIsInPain())
 				{
-					Owner.vel.x *= DECEL_MULT;
-					Owner.vel.y *= DECEL_MULT;
+					Owner.vel.x *= configDecel;
+					Owner.vel.y *= configDecel;
 				}
 
 				// make the view bobbing match the player's movement
-				PlayerPawn(Owner).ViewBob = DECEL_MULT;
+				PlayerPawn(Owner).ViewBob = (configDecel * configViewBob);
 			}
 		}
 
